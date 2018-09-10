@@ -237,7 +237,7 @@ function fnOnAnalyse() {
     //var oNote = document.getElementById("note_desc");
     //oNote.setAttribute("disabled",true);
     //var aContent = quill.getContents();
-    aNotesData[0].notes_desc = quill.getContents();
+    //aNotesData[0].notes_desc = quill.getContents();
     var aData = quill.getText();
     aResponse = [];
     aPurchaseOrder = [];

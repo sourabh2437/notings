@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Notes Application</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="css/style5.css">
+</head>
+
+<body>
+
+
+
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Sourabh Kulkarni</h3>
+                <h5>Last update on 03/09/2018</h5>
+            </div>
+            <ul class="list-unstyled CTAs">
+                <li><button class="btn btn-info" onclick="window.location.href='pages/Notes.html'">Create New Note</button></li>
+            </ul>
+
+            <ul class="list-unstyled components">
+
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Create from Template</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li><a href="#">Planning</a></li>
+                        <li><a href="#">Meeting notes</a></li>
+                        <li><a href="#">Custom Notes</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="list-unstyled components">
+                <li>
+                    <a class="active" href="#">Recent</a>
+                </li>
+                <li>
+                    <a href="#">Documents</a>
+                </li>
+                <li>
+                    <a href="#">Folder</a>
+                </li>
+            </ul>
+            <!--<ul class="list-unstyled CTAs">
+                <li><a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a></li>
+                <li><a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a></li>
+            </ul>-->
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="navbar-btn">
+                               
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
+                    </div>
+
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filter <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Action</a></li>
+                                    <li><a href="#">Another action</a></li>
+                                    <li><a href="#">Something else here</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Separated link</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">One more separated link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+
+
+                </div>
+            </nav>
+            <div id="note_tile_canvas">
+                <!--<div class="custom">
+                    <h2>Discussion with P&G</h2>
+                    <div class="float-left"></div>
+                    <div class="float-right"><em>Last changed on : 03/09/18  4:55 PM</em></div>
+                </div>
+                <div class="line"></div>
+                <div class="custom">
+                    <h2>Project Planning meeting with John</h2>
+                    <div class="timeStamp"><em>Last changed on : 03/09/18  5:05 PM</em></div>
+                </div>
+                <div class="line"></div>
+                <div class="custom">
+                    <h2>Meeting with BMW for Material MG-005</h2>
+                    <div class="timeStamp"><em>Last changed on : 03/09/18  5:22PM</em></div>
+                </div>
+                <div class="line"></div>
+                <div class="custom_synced">
+                    <h3>Lorem Ipsum Dolor</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>-->
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="./js/index.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+            
+        });
+
+    </script>
+</body>
+
+</html>

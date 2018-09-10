@@ -61,23 +61,23 @@
 
 
 
-var aNotesData = [{
-    "notes_id": 1,
-    "notes_timestamp": "07 / 09 / 18",
-    "notes_title": "Discussion with P&G",
-    "notes_desc": ["dsadsasdasvc",
-        "safhahfoasf",
-        "sfsajfkasbf",
-        "safkasbfksafb"]
-}, {
-    "notes_id": 1,
-    "notes_timestamp": "06 / 09 / 18",
-    "notes_title": "Meeting with BMW",
-    "notes_desc": ["dsadsasdasvc",
-        "safhahfoasf",
-        "sfsajfkasbf",
-        "safkasbfksafb"]
-}];
+//var aNotesData = [{
+//    "notes_id": 1,
+//    "notes_timestamp": "07 / 09 / 18",
+//    "notes_title": "Discussion with P&G",
+//    "notes_desc": ["dsadsasdasvc",
+//        "safhahfoasf",
+//        "sfsajfkasbf",
+//        "safkasbfksafb"]
+//}, {
+//    "notes_id": 1,
+//    "notes_timestamp": "06 / 09 / 18",
+//    "notes_title": "Meeting with BMW",
+//    "notes_desc": ["dsadsasdasvc",
+//        "safhahfoasf",
+//        "sfsajfkasbf",
+//        "safkasbfksafb"]
+//}];
 
 function fnAddDataInDB(aNotes) {
     var oNotesCanvas = document.getElementById("note_canvas");
@@ -90,14 +90,16 @@ function fnAddDataInDB(aNotes) {
     aNotesData.push(oNewObj);
 
 }
-function fnFillDataInNote(){
-    window.location.href='pages/Notes.html';
-    quill.setContents();
+
+function fnFillDataInNote() {
+    window.location.href = 'pages/Old_Notes.html';
+    
 }
+
 function fnCreateNotePreviewTiles(oObj) {
     var oCard = document.createElement("div");
-    var that=this;
-    oCard.addEventListener("click",function(){
+    var that = this;
+    oCard.addEventListener("click", function () {
         that.fnFillDataInNote();
     });
     oCard.setAttribute("class", "custom");
@@ -107,7 +109,7 @@ function fnCreateNotePreviewTiles(oObj) {
     oTime.setAttribute("class", "timeStamp");
 
     oTitle.innerHTML = oObj.notes_title;
-    oEm.innerHTML = "Last Changed on: " + oObj.notes_timestamp;
+    oTime.innerHTML = "Last Changed on: " + oObj.notes_timestamp;
 
     //oLine.setAttribute("class","line");
     oCard.appendChild(oTitle);
@@ -234,6 +236,7 @@ function fnOnAnalyse() {
     //var oNote = document.getElementById("note_desc");
     //oNote.setAttribute("disabled",true);
     //var aContent = quill.getContents();
+    aNotesData[0].notes_desc = quill.getContents();
     var aData = quill.getText();
     aResponse = [];
     aPurchaseOrder = [];
@@ -254,15 +257,75 @@ function fnOnAnalyse() {
     this.fnCallRecastAPI(aFinalNotes, 0, aFinalNotes.length);
 }
 
-function fnCreateNotification() {
-    var x = document.getElementById("snackbar");
-    x.className = "show";
-    setTimeout(function () {
-        x.className = x.className.replace("show", "");
-    }, 2000);
+function fnOnSync() {
+    var bInitial = 0;
+    var oGlobal = {};
+    aPurchaseOrder = [];
+    aNewPurchaseOrder = [];
+    for (var i = 0; i < aResponse.length; i++) {
+        if (aResponse[i].results.intents[0] !== undefined && aResponse[i].results.intents[0].slug === "update-purchase-order") {
+            var oCurr = aResponse[i].results.entities;
+            var oObj = this.fnCheckProperties(oCurr);
+            if (oCurr.hasOwnProperty("purchase-order-number")) {
+                if (bInitial === 0) {
+                    bInitial = 1;
+                    this.oCurrObj = {};
+                    $.extend(this.oCurrObj, oObj);
+                } else if (bInitial === 1) {
+                    bInitial = 1;
+                    aPurchaseOrder.push(this.oCurrObj);
+                    this.oCurrObj = {};
+                    $.extend(this.oCurrObj, oObj);
+                }
 
-    document.getElementById("syncBtn").disabled = false;
-    //document.getElementById("note_desc").disabled = false;
+            } else if (bInitial === 0) {
+                $.extend(oGlobal, oObj);
+            } else if (bInitial === 1) {
+                $.extend(this.oCurrObj, oObj);
+            }
+
+
+        } else if (aResponse[i].results.intents[0] !== undefined && aResponse[i].results.intents[0].slug === "create-purchase-order") {
+            var oCurr = aResponse[i].results.entities;
+            var len = Object.keys(oCurr).length;
+            this.oNewPOOrg = this.fnCreateNewPOObject(oCurr);
+            aNewPurchaseOrder.push(this.oNewPOOrg);
+        }
+    }
+    aPurchaseOrder.push(this.oCurrObj);
+
+    for (var i = 0; i < aPurchaseOrder.length; i++) {
+        $.extend(aPurchaseOrder[i], oGlobal);
+    }
+    modal.style.display = "block";
+    var oPopoverContent = document.getElementById("popover_body");
+    while (oPopoverContent.hasChildNodes()) {
+        oPopoverContent.removeChild(oPopoverContent.lastChild);
+    }
+    for (var x = 0; x < aPurchaseOrder.length; x++) {
+        oPopoverContent.appendChild(this.fnCreateTable(x));
+        for (var y = 0; y < Object.keys(aPurchaseOrder[x]).length; y++) {
+            if (Object.keys(aPurchaseOrder[x])[y] === "PurchaseOrder") {
+                var oTable = document.getElementById("po_table" + x);
+                oTable.caption.innerHTML = "Update Purchase Order " + Object.values(aPurchaseOrder[x])[y];
+            } else {
+                this.fnAddPurchaseOrderRow("po_table" + x, Object.keys(aPurchaseOrder[x])[y], Object.values(aPurchaseOrder[x])[y], "old");
+            }
+
+        }
+    }
+    oPopoverContent.appendChild(document.createElement("hr"));
+    for (var x = 0; x < aNewPurchaseOrder.length; x++) {
+        oPopoverContent.appendChild(this.fnCreateTableNEWPO(x));
+        var oTable = document.getElementById("new_po_table" + x);
+        oTable.caption.innerHTML = "Create a New Purchase Order with following details - ";
+        for (var y = 0; y < Object.keys(aNewPurchaseOrder[x]).length; y++) {
+            if (Object.keys(aNewPurchaseOrder[x])[y] !== "Purchase-Order") {
+                this.fnAddPurchaseOrderRow_NEWPO("new_po_table" + x, Object.keys(aNewPurchaseOrder[x])[y], Object.values(aNewPurchaseOrder[x])[y], "old");
+            }
+
+        }
+    }
 }
 
 function fnCallRecastAPI(aNotes, index, length) {
@@ -295,13 +358,16 @@ function fnCallRecastAPI(aNotes, index, length) {
 
 }
 
-function doSomething(aNotes) {
-    for (var i = 0; i < aNotes.length; i++) {
-        this.fnCallRecastAPI(aNotes[i]);
-    }
+function fnCreateNotification() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function () {
+        x.className = x.className.replace("show", "");
+    }, 2000);
+
+    document.getElementById("syncBtn").disabled = false;
+    //document.getElementById("note_desc").disabled = false;
 }
-// sreejith - Token 63e77855c5913afa15be15c9f8b6e430 
-//199c97ac2a8b75a4ac14d12f4bec56d5
 
 function fnCheckProperties(oCurr) {
     if (oCurr.hasOwnProperty("payment-term")) {
@@ -507,76 +573,7 @@ function fnAddPurchaseOrderRow(sTableId, sField, sNewValue, sOldValue) {
 }
 
 
-function fnOnSync() {
-    var bInitial = 0;
-    var oGlobal = {};
-    aPurchaseOrder = [];
-    aNewPurchaseOrder = [];
-    for (var i = 0; i < aResponse.length; i++) {
-        if (aResponse[i].results.intents[0] !== undefined && aResponse[i].results.intents[0].slug === "update-purchase-order") {
-            var oCurr = aResponse[i].results.entities;
-            var oObj = this.fnCheckProperties(oCurr);
-            if (oCurr.hasOwnProperty("purchase-order-number")) {
-                if (bInitial === 0) {
-                    bInitial = 1;
-                    this.oCurrObj = {};
-                    $.extend(this.oCurrObj, oObj);
-                } else if (bInitial === 1) {
-                    bInitial = 1;
-                    aPurchaseOrder.push(this.oCurrObj);
-                    this.oCurrObj = {};
-                    $.extend(this.oCurrObj, oObj);
-                }
 
-            } else if (bInitial === 0) {
-                $.extend(oGlobal, oObj);
-            } else if (bInitial === 1) {
-                $.extend(this.oCurrObj, oObj);
-            }
-
-
-        } else if (aResponse[i].results.intents[0] !== undefined && aResponse[i].results.intents[0].slug === "create-purchase-order") {
-            var oCurr = aResponse[i].results.entities;
-            var len = Object.keys(oCurr).length;
-            this.oNewPOOrg = this.fnCreateNewPOObject(oCurr);
-            aNewPurchaseOrder.push(this.oNewPOOrg);
-        }
-    }
-    aPurchaseOrder.push(this.oCurrObj);
-
-    for (var i = 0; i < aPurchaseOrder.length; i++) {
-        $.extend(aPurchaseOrder[i], oGlobal);
-    }
-    modal.style.display = "block";
-    var oPopoverContent = document.getElementById("popover_body");
-    while (oPopoverContent.hasChildNodes()) {
-        oPopoverContent.removeChild(oPopoverContent.lastChild);
-    }
-    for (var x = 0; x < aPurchaseOrder.length; x++) {
-        oPopoverContent.appendChild(this.fnCreateTable(x));
-        for (var y = 0; y < Object.keys(aPurchaseOrder[x]).length; y++) {
-            if (Object.keys(aPurchaseOrder[x])[y] === "PurchaseOrder") {
-                var oTable = document.getElementById("po_table" + x);
-                oTable.caption.innerHTML = "Update Purchase Order " + Object.values(aPurchaseOrder[x])[y];
-            } else {
-                this.fnAddPurchaseOrderRow("po_table" + x, Object.keys(aPurchaseOrder[x])[y], Object.values(aPurchaseOrder[x])[y], "old");
-            }
-
-        }
-    }
-    oPopoverContent.appendChild(document.createElement("hr"));
-    for (var x = 0; x < aNewPurchaseOrder.length; x++) {
-        oPopoverContent.appendChild(this.fnCreateTableNEWPO(x));
-        var oTable = document.getElementById("new_po_table" + x);
-        oTable.caption.innerHTML = "Create a New Purchase Order with following details - ";
-        for (var y = 0; y < Object.keys(aNewPurchaseOrder[x]).length; y++) {
-            if (Object.keys(aNewPurchaseOrder[x])[y] !== "Purchase-Order") {
-                this.fnAddPurchaseOrderRow_NEWPO("new_po_table" + x, Object.keys(aNewPurchaseOrder[x])[y], Object.values(aNewPurchaseOrder[x])[y], "old");
-            }
-
-        }
-    }
-}
 //for table popover
 function fnOnPopupCancel() {
     modal.style.display = "none";

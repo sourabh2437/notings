@@ -24,17 +24,23 @@
 
     <div class="container-fluid">
         <!-- Page Content Holder -->
+
         <div id="content">
+
 
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
 
                     <div class="navbar-header">
-
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                         <span></span>
                         <span></span>
                         <span></span>
-
+            <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
                     </div>
                     <div>
                     </div>
@@ -44,7 +50,7 @@
                                 <Button type="button" class="btn btn-info btn_space" onclick="fnOnAnalyse()">Analyse</Button>
                             </li>
                             <li>
-                                <Button type="button" id="syncBtn" disabled class="btn btn-primary " onclick="fnOnSync()">Sync</Button>
+                                <Button type="button" id="syncBtn" disabled class="btn btn-primary btn_space" onclick="fnOnSync()">Sync</Button>
                             </li>
                             <li>
                                 <Button type="button" id="addNewSection" class="btn btn-default btn_space" onclick="fnAddNewSection()">Add New Section</Button>
@@ -53,7 +59,7 @@
                             <li><a href="#">Attachment</a></li>
                             <li><a href="#">Copy</a></li>
                             <li>
-                                <Button type="button" id="deleteBtn" class="btn btn-danger">Delete</Button>
+                                <Button type="button" id="deleteBtn" class="btn btn-danger btn_space">Delete</Button>
                             </li>
 
 
@@ -61,6 +67,7 @@
                     </div>
                 </div>
             </nav>
+
 
             <!-- <div id="board">-->
             <div id="myModal" class="modal">
@@ -100,7 +107,7 @@
 
 
     <!-- jQuery CDN -->
-     <script type="text/javascript">
+    <script type="text/javascript">
         var aNotesData = [{
             "notes_id": 1,
             "notes_timestamp": "07 / 09 / 18",

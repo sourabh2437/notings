@@ -579,9 +579,9 @@ function fnAddPurchaseOrderRow(sTableId, sField, sNewValue, sOldValue) {
 function fnOnPopupCancel() {
     modal.style.display = "none";
 }
-span.onclick = function () {
+/*span.onclick = function () {
     modal.style.display = "none";
-}
+}*/
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
     if (event.target == modal) {

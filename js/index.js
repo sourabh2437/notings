@@ -88,6 +88,7 @@ function fnAddDataInDB(aNotes) {
         "notes_desc": aNotes
     }
     aNotesData.push(oNewObj);
+    
 
 }
 

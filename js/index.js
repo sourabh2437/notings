@@ -610,7 +610,7 @@ function fnAddNewSection() {
 
     var oSpan = document.createElement("span");
 
-    oSpan.innerHTML = new moment().format('LLLL');
+    oSpan.innerHTML = new moment().format('lll');
     oTime.setAttribute("class", "timeline");
     oSpan.setAttribute("class", "timeline-span");
 

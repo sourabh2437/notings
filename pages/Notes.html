@@ -110,7 +110,7 @@
     <script type="text/javascript">
         var aNotesData = [{
             "notes_id": 1,
-            "notes_timestamp": "07 / 09 / 18",
+            "notes_timestamp": new moment().format("lll"),
             "notes_title": "Discussion with P&G",
             "notes_desc": ["dsadsasdasvc",
                 "safhahfoasf",
@@ -147,7 +147,7 @@
     <!-- Initialize Quill editor -->
     <script src="../js/moment.js"></script>
     <script>
-        document.getElementById("timeline").innerHTML = new moment().format('LLLL');
+        document.getElementById("timeline").innerHTML = new moment().format('lll');
         var toolbarOptions = [
             'bold', 'italic', 'underline', 'strike', // toggled buttons
             'blockquote', 'code-block',

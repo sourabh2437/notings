@@ -88,13 +88,13 @@ function fnAddDataInDB(aNotes) {
         "notes_desc": aNotes
     }
     aNotesData.push(oNewObj);
-    
+
 
 }
 
 function fnFillDataInNote() {
     window.location.href = 'pages/Old_Notes.html';
-    
+
 }
 
 function fnCreateNotePreviewTiles(oObj) {
@@ -263,6 +263,7 @@ function fnOnSync() {
     var oGlobal = {};
     aPurchaseOrder = [];
     aNewPurchaseOrder = [];
+    aNewQuotation = [];
     for (var i = 0; i < aResponse.length; i++) {
         if (aResponse[i].results.intents[0] !== undefined && aResponse[i].results.intents[0].slug === "update-purchase-order") {
             var oCurr = aResponse[i].results.entities;
@@ -291,10 +292,16 @@ function fnOnSync() {
             var len = Object.keys(oCurr).length;
             this.oNewPOOrg = this.fnCreateNewPOObject(oCurr);
             aNewPurchaseOrder.push(this.oNewPOOrg);
+        } else if (aResponse[i].results.intents[0] !== undefined && aResponse[i].results.intents[0].slug === "create-quotation") {
+            var oCurr = aResponse[i].results.entities;
+            var len = Object.keys(oCurr).length;
+            this.oNewQtn = this.fnCreateNewQtnObject(oCurr);
+            aNewQuotation.push(this.oNewQtn);
         }
     }
-    aPurchaseOrder.push(this.oCurrObj);
-
+    if (this.oCurrObj !== undefined) {
+        aPurchaseOrder.push(this.oCurrObj);
+    }
     for (var i = 0; i < aPurchaseOrder.length; i++) {
         $.extend(aPurchaseOrder[i], oGlobal);
     }
@@ -322,11 +329,30 @@ function fnOnSync() {
         oTable.caption.innerHTML = "Create a New Purchase Order with following details - ";
         for (var y = 0; y < Object.keys(aNewPurchaseOrder[x]).length; y++) {
             if (Object.keys(aNewPurchaseOrder[x])[y] !== "Purchase-Order") {
-                this.fnAddPurchaseOrderRow_NEWPO("new_po_table" + x, Object.keys(aNewPurchaseOrder[x])[y], Object.values(aNewPurchaseOrder[x])[y], "old");
+                this.fnAddPurchaseOrderRow_NEWPO("new_po_table" + x, Object.keys(aNewPurchaseOrder[x])[y], Object.values(aNewPurchaseOrder[x])[y]);
             }
 
         }
     }
+
+    for (var x = 0; x < aNewQuotation.length; x++) {
+        oPopoverContent.appendChild(this.fnCreateTableNEWQuotation(x));
+        var oTable = document.getElementById("new_qtn_table" + x);
+        oTable.caption.innerHTML = "Create a New Sales order Quotation with following details - ";
+        for (var y = 0; y < Object.keys(aNewQuotation[x]).length; y++) {
+            if (Object.keys(aNewQuotation[x])[y] !== "quotation") {
+                this.fnAddPurchaseOrderRow_NEWPO("new_qtn_table" + x, Object.keys(aNewQuotation[x])[y], Object.values(aNewQuotation[x])[y]);
+            }
+
+        }
+        this.fnAddPurchaseOrderRow_NEWPO("new_qtn_table" + x, "Customer", oGlobal.Supplier);
+
+    }
+    /*if (aNewQuotation.length !== 0) {
+        
+    }*/
+
+
 }
 
 function fnCallRecastAPI(aNotes, index, length) {
@@ -445,6 +471,39 @@ function fnCreateNewPOObject(oCurr) {
 
 }
 
+function fnCreateNewQtnObject(oCurr) {
+    var oObj = {};
+    if (oCurr.hasOwnProperty("material")) {
+        $.extend(oObj, {
+            "Material": oCurr["material"][0].value
+        });
+    }
+    if (oCurr.hasOwnProperty("sales-area")) {
+        $.extend(oObj, {
+            "Sales Area": oCurr["sales-area"][0].value
+        });
+    }
+    if (oCurr.hasOwnProperty("quantity")) {
+        $.extend(oObj, {
+            "Quantity": oCurr["quantity"][0].value
+        });
+    }
+    if (oCurr.hasOwnProperty("validity")) {
+        $.extend(oObj, {
+            "Valid Upto": oCurr["validity"][0].value
+        });
+    }
+    if (oCurr.hasOwnProperty("discount")) {
+        $.extend(oObj, {
+            "Discount": oCurr["discount"][0].value
+        });
+    }
+    return oObj;
+
+
+
+}
+
 function fnFetchPurchaseOrdData() {
     var data = null;
 
@@ -514,6 +573,30 @@ function fnCreateTableNEWPO(x) {
     oTableCaption = document.createElement("caption");
     oTable.appendChild(oTableCaption);
     oTable.setAttribute("id", "new_po_table" + x);
+    oTable.setAttribute("class", "table table-bordered table-hover table-condensed");
+    var oThead = document.createElement("thead");
+    var oTBody = document.createElement("tbody");
+    oThead.setAttribute("class", "thead-dark");
+    var oTheadRow = document.createElement("tr");
+    var oTheadCol1 = document.createElement("th");
+    var oTheadCol2 = document.createElement("th");
+    var oTheadCol3 = document.createElement("th");
+    oTheadCol1.innerHTML = "Fields";
+    oTheadCol2.innerHTML = "Values";
+    oTheadRow.appendChild(oTheadCol1);
+    oTheadRow.appendChild(oTheadCol2);
+
+    oThead.appendChild(oTheadRow);
+    oTable.appendChild(oThead);
+    oTable.appendChild(oTBody);
+    return oTable;
+}
+
+function fnCreateTableNEWQuotation(x) {
+    var oTable = document.createElement("table");
+    oTableCaption = document.createElement("caption");
+    oTable.appendChild(oTableCaption);
+    oTable.setAttribute("id", "new_qtn_table" + x);
     oTable.setAttribute("class", "table table-bordered table-hover table-condensed");
     var oThead = document.createElement("thead");
     var oTBody = document.createElement("tbody");

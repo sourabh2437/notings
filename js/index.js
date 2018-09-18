@@ -141,6 +141,8 @@ function fnCreateNoteTileCanvas() {
 
 }
 $(document).ready(function () {
+    var oAppDateStamp = document.getElementById("app_date");
+    oAppDateStamp.innerHTML = "Last updated on " + new moment().format('ll');
     fnCreateNoteTileCanvas(); //.bind(this);
 });
 /*var noteTemp = '<div class="note" id="note">' +

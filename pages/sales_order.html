@@ -111,32 +111,19 @@
     <script>
         document.getElementById("timeline").innerHTML = new moment().format('lll');
         var toolbarOptions = [
-            'bold', 'italic', 'underline', 'strike', // toggled buttons
+            'bold', 'italic', 'underline', 'strike', 
             'blockquote', 'code-block',
             {
                 'header': 1
             }, {
                 'header': 2
-            }, // custom button values
+            },
             {
                 'list': 'ordered'
             }, {
                 'list': 'bullet'
             },
 
-            /*{
-                'indent': '-1'
-            }, {
-                'indent': '+1'
-            }, // outdent/indent
-
-
-            {
-                'size': ['small', false, 'large', 'huge']
-            }, // custom dropdown
-            {
-                'header': [1, 2, 3, 4, 5, 6, false]
-            },*/
             'link', 'image', 'clean'
         ];
         var quill = new Quill('#editor', {
@@ -146,34 +133,6 @@
             },
             placeholder: 'Add Notes description...'
         });
-        /*var aNotesData = [{
-            "notes_id": 1,
-            "notes_timestamp": "Sep 10, 2018 5:30 PM",
-            "notes_title": "Discussion with P&G",
-            "notes_desc": ["dsadsasdasvc",
-                "safhahfoasf",
-                "sfsajfkasbf",
-                "safkasbfksafb"
-            ]
-        }, {
-            "notes_id": 2,
-            "notes_timestamp": "Sep 9, 2018 10:30 AM",
-            "notes_title": "Sales Meeting with customer Nestle",
-            "notes_desc": ["dsadsasdasvc",
-                "safhahfoasf",
-                "sfsajfkasbf",
-                "safkasbfksafb"
-            ]
-        }, {
-            "notes_id": 3,
-            "notes_timestamp": "Sep 19, 2018 02:30 PM",
-            "notes_title": "Meeting with BMW",
-            "notes_desc": ["dsadsasdasvc",
-                "safhahfoasf",
-                "sfsajfkasbf",
-                "safkasbfksafb"
-            ]
-        }];*/
 
     </script>
     <script src="../js/sales_order.js"></script>

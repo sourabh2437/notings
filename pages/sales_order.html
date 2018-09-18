@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="../note_favicon.png" type="image/png">
+    <title>Notings</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="../css/style5.css">
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <!-- Page Content Holder -->
+        <div id="content">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <Button type="button" class="btn btn-info btn_space" onclick="fnOnAnalyse()">Analyse</Button>
+                            </li>
+                            <li>
+                                <Button type="button" id="syncBtn" disabled class="btn btn-primary btn_space" onclick="fnOnSync()">Sync</Button>
+                            </li>
+                            <li>
+                                <Button type="button" id="addNewSection" class="btn btn-default btn_space" onclick="fnAddNewSection()">Add New Section</Button>
+                            </li>
+                            <li><a href="#">Add Bookmarks</a></li>
+                            <li><a href="#">Attachment</a></li>
+                            <li><a href="#">Copy</a></li>
+                            <li>
+                                <Button type="button" id="deleteBtn" class="btn btn-danger btn_space">Delete</Button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- <div id="board">-->
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h4 id="table-header"> </h4>
+                    </div>
+                    <div class="modal-body" id="popover_body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <Button class="btn btn-success">Apply Changes</Button>
+                        <Button class="btn btn-info" onclick="fnOnPopupCancel()">Cancel</Button>
+                    </div>
+                </div>
+            </div>
+            <div id="note_canvas" class="note_canvas">
+                <form>
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" type="text" placeholder="Enter Title..." id="note_title">
+                    </div>
+                </form>
+                <h2 class="timeline"><span class="timeline-span" id="timeline"></span></h2>
+                <div id="editor" class="editor" style="border: none;">
+                    <p>Enter text here...</p>
+                    <p><br></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery CDN -->
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+
+    </script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Initialize Quill editor -->
+    <script src="../js/moment.js"></script>
+    <script>
+        document.getElementById("timeline").innerHTML = new moment().format('lll');
+        var toolbarOptions = [
+            'bold', 'italic', 'underline', 'strike', // toggled buttons
+            'blockquote', 'code-block',
+            {
+                'header': 1
+            }, {
+                'header': 2
+            }, // custom button values
+            {
+                'list': 'ordered'
+            }, {
+                'list': 'bullet'
+            },
+
+            /*{
+                'indent': '-1'
+            }, {
+                'indent': '+1'
+            }, // outdent/indent
+
+
+            {
+                'size': ['small', false, 'large', 'huge']
+            }, // custom dropdown
+            {
+                'header': [1, 2, 3, 4, 5, 6, false]
+            },*/
+            'link', 'image', 'clean'
+        ];
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: toolbarOptions
+            },
+        });
+        /*var aNotesData = [{
+            "notes_id": 1,
+            "notes_timestamp": "Sep 10, 2018 5:30 PM",
+            "notes_title": "Discussion with P&G",
+            "notes_desc": ["dsadsasdasvc",
+                "safhahfoasf",
+                "sfsajfkasbf",
+                "safkasbfksafb"
+            ]
+        }, {
+            "notes_id": 2,
+            "notes_timestamp": "Sep 9, 2018 10:30 AM",
+            "notes_title": "Sales Meeting with customer Nestle",
+            "notes_desc": ["dsadsasdasvc",
+                "safhahfoasf",
+                "sfsajfkasbf",
+                "safkasbfksafb"
+            ]
+        }, {
+            "notes_id": 3,
+            "notes_timestamp": "Sep 19, 2018 02:30 PM",
+            "notes_title": "Meeting with BMW",
+            "notes_desc": ["dsadsasdasvc",
+                "safhahfoasf",
+                "sfsajfkasbf",
+                "safkasbfksafb"
+            ]
+        }];*/
+
+    </script>
+    <script src="../js/sales_order.js"></script>
+    <script src="../js/index.js"></script>
+</body>
+<div id="snackbar" class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Success!</strong> Analysis of the note completed successfully!
+</div>
+
+</html>

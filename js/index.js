@@ -92,23 +92,30 @@ function fnAddDataInDB(aNotes) {
 
 }
 
-function fnFillDataInNote() {
-    window.location.href = 'pages/Old_Notes.html';
+function fnFillDataInNote(oEvent) {
+    if (oEvent.srcElement.id === "card0" || oEvent.srcElement.id === "title0" || oEvent.srcElement.id === "time0") {
+        window.location.href = 'pages/purchase_order.html';
+    } else if (oEvent.srcElement.id === "card1" || oEvent.srcElement.id === "title1" || oEvent.srcElement.id === "time1") {
+        window.location.href = 'pages/sales_order.html';
+    }
+
 
 }
 
-function fnCreateNotePreviewTiles(oObj) {
+function fnCreateNotePreviewTiles(oObj, index) {
     var oCard = document.createElement("div");
     var that = this;
-    oCard.addEventListener("click", function () {
-        that.fnFillDataInNote();
+    oCard.addEventListener("click", function (oEvent) {
+        that.fnFillDataInNote(oEvent);
     });
+    oCard.setAttribute("id", "card" + index);
     oCard.setAttribute("class", "custom");
     var oTitle = document.createElement("h2");
     var oEm = document.createElement("em");
     var oTime = document.createElement("div");
     oTime.setAttribute("class", "timeStamp");
-
+    oTitle.setAttribute("id", "title" + index);
+    oTime.setAttribute("id", "time" + index);
     oTitle.innerHTML = oObj.notes_title;
     oTime.innerHTML = "Last Changed on: " + oObj.notes_timestamp;
 
@@ -122,13 +129,16 @@ function fnCreateNotePreviewTiles(oObj) {
 function fnCreateNoteTileCanvas() {
 
     var oCanvas = document.getElementById("note_tile_canvas");
-    for (var i = 0; i < aNotesData.length; i++) {
-        var oNewCard = this.fnCreateNotePreviewTiles(aNotesData[i]);
-        oCanvas.appendChild(oNewCard);
-        var oLine = document.createElement("div");
-        oLine.setAttribute("class", "line");
-        oCanvas.appendChild(oLine);
+    if (oCanvas !== null && (aNotesData !== undefined || aNotesData !== null)) {
+        for (var i = 0; i < aNotesData.length; i++) {
+            var oNewCard = this.fnCreateNotePreviewTiles(aNotesData[i], i);
+            oCanvas.appendChild(oNewCard);
+            var oLine = document.createElement("div");
+            oLine.setAttribute("class", "line");
+            oCanvas.appendChild(oLine);
+        }
     }
+
 }
 $(document).ready(function () {
     fnCreateNoteTileCanvas(); //.bind(this);

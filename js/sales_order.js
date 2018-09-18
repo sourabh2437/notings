@@ -7,6 +7,8 @@ function fnLoadDataInCards() {
             {
                 "insert": "\n"
             }, {
+                "insert": "\n"
+            }, {
                 "insert": "create a quotation for sales area 0002/01/01 material MAT_1 quantity 500 valid upto 15/12/2018 and discount 15%"
         }
                ]

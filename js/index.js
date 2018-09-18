@@ -242,7 +242,49 @@ function fnOnAnalyse() {
     this.fnCallRecastAPI(aNotes, 0, aNotes.length);
 }
 */
-//For Quill -
+//Quill - AutoSave
+// Store accumulated changes
+var Delta = Quill.import('delta');
+var change = new Delta();
+quill.on('text-change', function (delta) {
+    change = change.compose(delta);
+});
+
+// Save periodically
+setInterval(function () {
+    if (change.length() > 0) {
+        $.notify("Changes saved", "success");
+        /*$("#deleteBtn").notify(
+    "Changes saved", "success", [{
+        arrowShow: false,
+        globalPosition: 'top left',
+                    }]
+);*/
+        //console.log('Saving changes', change);
+        /* 
+        Send partial changes
+        $.post('/your-endpoint', { 
+          partial: JSON.stringify(change) 
+        });
+    
+        Send entire document
+        $.post('/your-endpoint', { 
+          doc: JSON.stringify(quill.getContents())
+        });
+        */
+        change = new Delta();
+    }
+}, 7 * 1000);
+
+// Check for unsaved data
+window.onbeforeunload = function () {
+    if (change.length() > 0) {
+        return 'There are unsaved changes. Are you sure you want to leave?';
+    }
+}
+
+//Quill - AutoSave
+
 function fnOnAnalyse() {
     //var oNote = document.getElementById("note_desc");
     //oNote.setAttribute("disabled",true);
@@ -388,6 +430,7 @@ function fnCallRecastAPI(aNotes, index, length) {
             if (xhttp.readyState == 4 && xhttp.status == 200) {
                 var response = JSON.parse(xhttp.responseText);
                 aResponse.push(response);
+                //$.notify("Note " + (index + 1) + " successfully analysed", "success");
                 that.fnCallRecastAPI(aNotes, index + 1, length);
             }
         }

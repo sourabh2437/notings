@@ -146,6 +146,7 @@
 
     <!-- Initialize Quill editor -->
     <script src="../js/moment.js"></script>
+    <script src="../js/notify.js"></script>
     <script>
         document.getElementById("timeline").innerHTML = new moment().format('lll');
         var toolbarOptions = [
@@ -177,13 +178,16 @@
             },*/
             'link', 'image', 'clean'
         ];
+       
         var quill = new Quill('#editor', {
             theme: 'snow',
             modules: {
                 toolbar: toolbarOptions
             },
+            placeholder: 'Add Notes description...'
         });
-
+        //For Quill -
+        
     </script>
     <script src="../js/index.js"></script>
 
